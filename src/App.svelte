@@ -10,12 +10,17 @@
   let hasMovedToNext = false
 
   function addPlayer(){
-      let newPlayer = playerInp.value
-      playerInp.value = ''
+      let newPlayer = playerInp.value.trim()
+      if(newPlayer === ''){
+        alert("Please put in a name")
+        return
+      }
       playerArr = [...playerArr, {playerName: newPlayer} ]
       isPlayersShown = true
+      playerInp.value = ''
 
       randomArr = []
+      
 
   }
 
@@ -167,7 +172,9 @@ function reverse(){
 
     <div class="input-box">
 
-      <input bind:this={playerInp} type="text" class="border-2 border-black px-4 py-2 rounded-md">
+      <input on:keydown={(e)=>{if(e.key == "Enter"){
+        addPlayer()
+      }}} bind:this={playerInp} type="text" class="border-2 border-black px-4 py-2 rounded-md">
 
       <button on:click={addPlayer} class="border-2 border-black rounded-md p-2">click</button>
     </div>
@@ -184,8 +191,12 @@ function reverse(){
           <p class="mr-2">{playerArr.indexOf(player) + 1}.</p>
           <p>{player.playerName}</p>
         </div>
-        <button  on:click={removePlayer} class="border-black border-2 rounded-[50%] p-2">✖</button>
+        <button  on:click={removePlayer} class=" p-2">✖</button>
       </div>
+
+      {#if playerArr.indexOf(player) + 1 !== playerArr.length}
+      <hr class="border-none bg-black h-[2px] w-full mb-2">
+      {/if}
       
     {/each}
 
