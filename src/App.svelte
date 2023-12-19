@@ -8,6 +8,7 @@
   let randomBtn
   let hasReversed = false
   let hasMovedToNext = false
+  let playerLength
 
   function addPlayer(){
       let newPlayer = playerInp.value.trim()
@@ -26,12 +27,10 @@
 
   function removePlayer(e){
       let targetedPlayer = e.target.previousElementSibling.textContent
-      console.log(targetedPlayer)
       playerArr = playerArr.filter((obj)=>{
             return !targetedPlayer.includes(obj.playerName)
       } )
       playerArr = [...playerArr]
-      console.log(playerArr)
 
       if(playerArr.length === 0){
         isPlayersShown = false
@@ -58,7 +57,6 @@
     clearInterval(myInterval)
     randomBtn.disabled = false
     randomBtn.textContent = 'Randomise'
-
   }
 
 }, 800);
@@ -210,7 +208,7 @@ function reverse(){
 
 
   <!-- This is the next section that displays the players and randomised box -->
-<div class={`vs-list ${hasMovedToNext ? 'flex' : 'hidden'} flex flex-col gap-4`}>
+<div class={`vs-list ${hasMovedToNext ? 'flex' : 'hidden'}  flex flex-col gap-4`}>
 
   <div class="flex gap-2">
     <p>The players are</p>
@@ -221,7 +219,7 @@ function reverse(){
         {#if playerArr.at(-1) === player}
         {player.playerName}
         {:else}
-        {player.playerName},  
+        {player.playerName}, &#160;
         {/if}
       {/each}
     </div>
@@ -234,14 +232,14 @@ function reverse(){
 
 
 
-  <div class=" grid grid-cols-2 grid-flow-row justify-center items-center w-[70%] mx-auto">
+  <div class=" grid grid-cols-2 gap-6 grid-flow-row justify-center items-center w-[70%] mx-auto relative">
 
     {#each randomArr as number}
-      <div transition:slide class="flex  justify-between">
+      <div transition:slide class={`${randomArr.indexOf(number) + 1 == playerArr.length && (randomArr.indexOf(number) + 1 ) % 2 === 1 ? 'col-span-full justify-center w-full' : 'justify-between'} flex `}>
        <p class={`${(randomArr.indexOf(number) + 1 ) % 2 === 0 && 'ml-auto'}`}> {playerArr[number-1].playerName}</p>
 
-        {#if (randomArr.indexOf(number) + 1 ) % 2 === 1 && randomArr.indexOf(number) !== playerArr.length}
-            <p>vs</p>
+        {#if (randomArr.indexOf(number) + 1 ) % 2 === 1 && randomArr.indexOf(number) + 1 !== playerArr.length}
+            <p class="absolute left-[50%] translate-x-[-50%]">vs</p>
         {/if}
       </div>
     {/each}
